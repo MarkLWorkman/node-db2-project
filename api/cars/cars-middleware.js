@@ -1,18 +1,18 @@
-const cars = require("./cars-model");
+const Cars = require("./cars-model");
 const vinValidator = require("vin-validator");
-const Error = require("../Error");
+const ExpressError = require("../ExpressError");
 
 const checkCarId = async (req, res, next) => {
   try {
-    const car = await cars.getById(req.params.id);
+    const car = await Cars.getById(req.params.id);
     if (car) {
       req.car = car;
       next();
     } else {
-      next(new Error(`Car with id ${req.params.id} was not found`, 404));
+      next(new ExpressError(`Car with id ${req.params.id} was not found`, 404));
     }
   } catch (error) {
-    next(new Error(error, 500));
+    next(new ExpressErrorrror(error, 500));
   }
 };
 
@@ -20,20 +20,20 @@ const checkCarPayload = (req, res, next) => {
   try {
     const body = req.body;
     if (!body.vin) {
-      next(new Error(`VIN is missing`, 400));
+      next(new ExpressError(`VIN is missing`, 400));
     } else if (!body.make) {
-      next(new Error(`Make is missing`, 400));
+      next(new ExpressError(`Make is missing`, 400));
     } else if (!body.model) {
-      next(new Error(`Model is missing`, 400));
+      next(new ExpressError(`Model is missing`, 400));
     } else if (!body.mileage) {
-      next(new Error(`Mileage is missing`, 400));
+      next(new ExpressError(`Mileage is missing`, 400));
     } else if (typeof body.mileage !== "number") {
-      next(new Error("Mileage must be a number", 400));
+      next(new ExpressError("Mileage must be a number", 400));
     } else {
       next();
     }
   } catch (error) {
-    next(new Error(error, 500));
+    next(new ExpressError(error, 500));
   }
 };
 
@@ -43,10 +43,10 @@ const checkVinNumberValid = (req, res, next) => {
     if (vinValidator.validate(vin)) {
       next();
     } else {
-      next(new Error(`vin number ${vin} is not valid`, 400));
+      next(new ExpressError(`vin number ${vin} is not valid`, 400));
     }
   } catch (error) {
-    next(new Error(error, 500));
+    next(new ExpressError(error, 500));
   }
 };
 
