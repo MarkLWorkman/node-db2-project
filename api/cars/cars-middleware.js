@@ -38,9 +38,24 @@ const checkCarPayload = (req, res, next) => {
 };
 
 const checkVinNumberValid = (req, res, next) => {
-  // DO YOUR MAGIC
+  try {
+    const vin = req.body.vin;
+    if (vinValidator.validate(vin)) {
+      next();
+    } else {
+      next(new Error(`vin number ${vin} is not valid`, 400));
+    }
+  } catch (error) {
+    next(new Error(error, 500));
+  }
 };
 
 const checkVinNumberUnique = (req, res, next) => {
   // DO YOUR MAGIC
+};
+
+module.exports = {
+  checkCarId,
+  checkCarPayload,
+  checkVinNumberValid,
 };
