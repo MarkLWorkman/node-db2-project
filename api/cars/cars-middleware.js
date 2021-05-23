@@ -17,7 +17,24 @@ const checkCarId = async (req, res, next) => {
 };
 
 const checkCarPayload = (req, res, next) => {
-  // DO YOUR MAGIC
+  try {
+    const body = req.body;
+    if (!body.vin) {
+      next(new Error(`VIN is missing`, 400));
+    } else if (!body.make) {
+      next(new Error(`Make is missing`, 400));
+    } else if (!body.model) {
+      next(new Error(`Model is missing`, 400));
+    } else if (!body.mileage) {
+      next(new Error(`Mileage is missing`, 400));
+    } else if (typeof body.mileage !== "number") {
+      next(new Error("Mileage must be a number", 400));
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(new Error(error, 500));
+  }
 };
 
 const checkVinNumberValid = (req, res, next) => {
